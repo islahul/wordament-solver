@@ -46,5 +46,5 @@ function writeDictionaryToFile(filename, dictionaryMap) {
 }
 
 function test(dictionaryMap) {
-  return dictionaryMap.dict.h.e.l.l.o['.'];
+  return dictionaryMap.dict.s.h.i.t['.'];
 }

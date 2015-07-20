@@ -1,2 +1,7 @@
 # wordament-solver
-A solver for Wordament Game
+
+####A Solver for Wordament Game
+
+
+Run (replace txt file with your own dictionary if you want, words separated by line-ending \\n)
+```node english-dictionary-mapper ./english-dictionary.txt```
