@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var colors = require('colors');
 var dictTree = require('./english-dictionary-tree.json');
 var problemStatement = String(process.argv[2]).split(' ');
 var problemMatrix = [];
@@ -23,6 +24,15 @@ _.each(problemMatrix, function(row, rowIndex) {
   });
 });
 
+var solutions = _.keys(results);
+
+solutions = solutions.sort(function(a, b) {
+  return b.length - a.length;
+});
+
+_.each(solutions.slice(0, 50), function(solution) {
+  prettyPrint(solution, results[solution]);
+});
 
 function infectNode(problemMatrix, rowIndex, colIndex) {
   for(var i = rowIndex - 1; i <= rowIndex + 1; i++) {
@@ -75,7 +85,7 @@ function startThread(problemMatrix, rowIndex, colIndex, charIndexTrace, charTrac
       var testResults = testCharTrace(dictTree, charTrace);
 
       if(testResults.isWord) {
-        prettyPrint(charTrace);
+        storeSolution(charTrace, charIndexTrace);
       }
 
       if(testResults.canGoFurther) {
@@ -124,11 +134,35 @@ function testCharTrace(dictTree, charTrace) {
 }
 
 
-function prettyPrint(charTrace) {
-  if(charTrace.length < 3 || results[charTrace.join('')]) {
-    return;
+function storeSolution(charTrace, charIndexTrace) {
+  if(charTrace.length > 3 && !results[charTrace.join('')]) {
+    results[charTrace.join('')] = charIndexTrace;
   }
+}
 
-  console.log(charTrace.join('') + '\n');
-  results[charTrace.join('')] = true;
+function prettyPrint(solution, charIndexTrace) {
+  console.log(solution);
+  for(var i = 0; i < 4; i++) {
+    var printRow = '';
+    for(var j = 0; j < 4; j++) {
+      var numOrder = charIndexTrace.indexOf(4*i + j);
+      if(numOrder >= 0) {
+        printRow += problemMatrix[i][j][getColor(numOrder)];
+      }
+      else {
+        printRow += ' ';
+      }
+    }
+    console.log(printRow);
+  }
+  console.log('     \n\n')
+}
+
+function getColor(numOrder) {
+  if(numOrder === 0) {
+    return 'white';
+  }
+  else {
+    return ['red', 'red', 'green'][(numOrder - 1)%3];
+  }
 }
